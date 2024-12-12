@@ -12,17 +12,17 @@ const MapaScreen = ({ navigation }: { navigation: any }) => {
     longitude: venda.longitude,
   }));
 
-  console.log(coordenadasVendas); // [{"latitude": 35.321345112, "longitude": -21.44545487}, {"latitude": 35.321345112, "longitude": -21.44545487}] [Component Stack]
+  console.log(coordenadasVendas);
 
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: vendas.length > 0 ? vendas[0].latitude : -8.05428,
-          longitude: vendas.length > 0 ? vendas[0].longitude : -34.8813,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
+          latitude: vendas[0]?.latitude || -8.05428,
+          longitude: vendas[0]?.longitude || -34.8813,
+          latitudeDelta: 0.5,
+          longitudeDelta: 0.5,
         }}
       >
         {vendas.map((venda) => (

@@ -58,14 +58,20 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView>
         <View style={styles.produtoCardContainer}>
           <ProdutosAgricolasCard />
           <QuantidadeProdutosCard quantidadeProdutos={produtos.length} />
         </View>
         <View style={styles.produtosCarouselContainer}>
-          <ProdutoCarousel listaProdutos={produtos} />
+          {produtos.length > 0 ? (
+            <ProdutoCarousel listaProdutos={produtos} />
+          ) : (
+            <Text style={styles.semProdutosCadastradosText}>
+              Sem produtos cadastrados
+            </Text>
+          )}
         </View>
         <View style={styles.resumoVendasContainer}>
           <ResumoVendasCard
@@ -74,10 +80,16 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           />
         </View>
         <View>
-          <VendasCarrousel listaVendas={vendasDoDia} />
+          {vendasDoDia.length > 0 ? (
+            <VendasCarrousel listaVendas={vendasDoDia} />
+          ) : (
+            <Text style={styles.semProdutosCadastradosText}>
+              Sem vendas cadastradas
+            </Text>
+          )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -97,6 +109,12 @@ const styles = StyleSheet.create({
   },
   resumoVendasContainer: {
     marginTop: 10,
+  },
+  semProdutosCadastradosText: {
+    padding: 10,
+    fontSize: 18,
+    color: "white",
+    textAlign: "center",
   },
 });
 

@@ -40,6 +40,16 @@ const CarrinhoScreen = () => {
   };
 
   const handleFinalizarCompra = async () => {
+    if (carrinhoItens.length === 0) {
+      Toast.show({
+        type: "error",
+        text1: "Adicione produtos ao carrinho!",
+        text2: `Deve ter pelo menos um produto no carrinho.`,
+        visibilityTime: 4000, // Duração em milissegundos (2 segundos)
+      });
+      return;
+    }
+
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       Toast.show({
@@ -51,6 +61,7 @@ const CarrinhoScreen = () => {
       return;
     }
     const location = await Location.getCurrentPositionAsync({});
+    console.error(location);
 
     const novaVenda: VendaCreateDTO = {
       dataVenda: new Date().toISOString(),
