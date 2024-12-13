@@ -1,11 +1,14 @@
 const baseUrl = "http://localhost:3000";
 // const baseUrl = "http://10.0.3.2:3000";
+
+// Objeto com algumas rotas da API
 export const apiRoutes = {
   produto: `${baseUrl}/api/produtos`,
   venda: `${baseUrl}/api/vendas`,
   produtosVenda: `${baseUrl}/api/vendas/produtos-venda`,
 };
 
+// Função para fazer requisições à API ou URLs externas
 export const apiFetch = async (url: string, options?: RequestInit) => {
   try {
     const response = await fetch(url, options);

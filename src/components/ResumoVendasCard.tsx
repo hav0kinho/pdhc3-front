@@ -5,6 +5,7 @@ interface Props {
   valorTotal: number;
 }
 
+// Componente que mostra a quantidade de vendas e o R$ total do dia
 const ResumoVendasCard = ({ quantidadeVendas, valorTotal }: Props) => {
   console.log("valorTotal", valorTotal);
   return (

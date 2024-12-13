@@ -10,10 +10,11 @@ const MapaScreen = ({ navigation }: { navigation: any }) => {
   const coordenadasVendas = vendas.map((venda) => ({
     latitude: venda.latitude,
     longitude: venda.longitude,
-  }));
+  })); // Array de objetos com latitude e longitude das vendas
 
   console.log(coordenadasVendas);
 
+  //lista.at(-1)
   return (
     <View style={styles.container}>
       <MapView

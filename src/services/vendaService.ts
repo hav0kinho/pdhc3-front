@@ -33,6 +33,7 @@ type VendaGet = {
   valorTotal: number;
 };
 
+// Função para buscar as vendas do back-end
 export const getVendas = async (): Promise<Venda[]> => {
   try {
     const data = await apiFetch(apiRoutes.venda, {
@@ -50,7 +51,7 @@ export const getVendas = async (): Promise<Venda[]> => {
         valorPago: Number(produto.valorPago),
         vendaId: produto.vendaId,
         produtoId: produto.produtoId,
-      }));
+      })); // Mapeando os produtos vendidos para o formato correto em uma lista.
 
       const novaVenda: Venda = {
         id: venda.id,
@@ -59,7 +60,7 @@ export const getVendas = async (): Promise<Venda[]> => {
         dataVenda: new Date(venda.dataVenda).toString(),
         valorTotal: Number(venda.valorTotal),
         produtosVendidos,
-      };
+      }; // Formatando a venda para o formato correto, junto com os produtos vendidos.
 
       vendas.push(novaVenda);
     });
@@ -70,6 +71,7 @@ export const getVendas = async (): Promise<Venda[]> => {
   }
 };
 
+// Função para criar uma venda no back-end
 export const createVenda = async (
   venda: VendaCreate
 ): Promise<Venda | null> => {
@@ -92,19 +94,18 @@ export const createVenda = async (
           "Content-Type": "application/json",
         },
       }
-    );
+    ); // Buscando os produtos vendidos da venda (Entidade de Relacionamento/Intermediária)
 
     console.log("Produtos da Venda Resgatados com sucesso");
 
     console.log("Criando Produtos Vendidos");
-    console.log(dataProdutosVendidos);
     const produtosVendidos = dataProdutosVendidos.map((produto) => ({
       id: produto.id,
       quantidadeVendida: Number(produto.quantidadeVendida),
       valorPago: Number(produto.valorPago),
       vendaId: produto.vendaId,
       produtoId: produto.produtoId,
-    }));
+    })); // Formatando os produtos vendidos para o formato correto
 
     console.log("Criando Nova Venda");
 
@@ -115,9 +116,9 @@ export const createVenda = async (
       dataVenda: new Date(dataVenda.dataVenda).toString(),
       valorTotal: Number(dataVenda.valorTotal),
       produtosVendidos,
-    };
+    }; // Formatando a venda para o formato correto, junto com os produtos vendidos.
 
-    console.log("retornando nova venda");
+    console.log("Retornando Nova Venda");
     return novaVenda;
   } catch (error) {
     console.error("Erro ao criar a venda: " + error);

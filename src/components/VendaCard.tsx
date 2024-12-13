@@ -16,10 +16,12 @@ const formatDateTime = (date: Date) => {
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
+// Componente de cartão de venda (Que tem o valor total e a data da venda e o botão para abrir o relatório)
 const VendaCard = ({ venda }: VendaCardProps) => {
   const produtos = useSelector((state: RootState) => state.produtos.lista);
+  // Função para exibir o relatório da venda
   const abrirRelatório = async () => {
-    // Pegando os produtos vendidos da venda
+    // Pegando os produtos vendidos da venda (Uma lista de strings com todos os produtos)
     const produtosVendidos = venda.produtosVendidos.map((produtoVenda) => {
       const produto = produtos.find(
         (produto) => produto.id === produtoVenda.produtoId
@@ -29,14 +31,17 @@ const VendaCard = ({ venda }: VendaCardProps) => {
       }\n   - Total: R$ ${produtoVenda.valorPago.toFixed(2)}`;
     });
 
+    // Junta todas as strings em uma única string
     const relatorioProdutosVendidos = produtosVendidos.join("\n\n");
 
+    // Monta a string que vai representar o relatório da venda
     const relatorio = `📝 *Relatório da Venda*\n\n📅 Data: ${formatDateTime(
       new Date(venda.dataVenda)
     )}\n💰 Valor Total: R$ ${venda.valorTotal.toFixed(
       2
     )}\n\n📦 Produtos Vendidos:\n${relatorioProdutosVendidos}`;
 
+    // Cria o alert com o relatório
     alert(relatorio);
   };
   return (

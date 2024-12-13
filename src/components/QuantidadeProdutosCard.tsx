@@ -4,6 +4,7 @@ interface Props {
   quantidadeProdutos: number;
 }
 
+// Componente que mostra a quantidade de produtos cadastrados até o momento
 const QuantidadeProdutosCard = ({ quantidadeProdutos }: Props) => {
   return (
     <View style={styles.container}>

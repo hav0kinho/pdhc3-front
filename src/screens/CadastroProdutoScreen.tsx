@@ -30,12 +30,13 @@ const CadastroProdutoScreen = () => {
 
   const dispatch = useDispatch();
 
-  const { validarImagemUrl, isLoading } = useValidarImagemUrl(); // Use o hook
+  const { validarImagemUrl, isLoading } = useValidarImagemUrl(); // Use o hook para validar a URL da imagem
 
-  // Validação e submissão do formulário
+  // Validação e submissão do formulário (Obrigatoriedade de Campos, Formatação de Números e URL de Imagem)
   const handleCadastro = async () => {
     const { nome, precoUnidade, quantidade, imagemUrl } = produto;
 
+    // Validação da obrigatoriedade dos campos
     if (!nome || !precoUnidade || !quantidade || !imagemUrl) {
       Toast.show({
         type: "error",
@@ -45,6 +46,7 @@ const CadastroProdutoScreen = () => {
       return;
     }
 
+    // Validação de números
     if (isNaN(Number(precoUnidade)) || isNaN(Number(quantidade))) {
       Toast.show({
         type: "error",
@@ -54,6 +56,7 @@ const CadastroProdutoScreen = () => {
       return;
     }
 
+    // Validação da URL da imagem
     const urlValida = await validarImagemUrl(imagemUrl);
     if (!urlValida) {
       Toast.show({
@@ -66,6 +69,7 @@ const CadastroProdutoScreen = () => {
 
     Alert.alert("Sucesso", "Produto cadastrado com sucesso!");
 
+    // Cria um novo produto com os dados do formulário
     const novoProduto = {
       nome: nome,
       precoUnidade: Number(precoUnidade),
@@ -74,13 +78,13 @@ const CadastroProdutoScreen = () => {
     };
     const produtoCadastrado: Produto | null = await createProduto(novoProduto);
     if (produtoCadastrado) {
-      dispatch(adicionarProduto(produtoCadastrado)); // Adiciona o produto ao Redux
+      dispatch(adicionarProduto(produtoCadastrado)); // Adiciona o produto ao Redux/Estado Global
     }
 
-    // Aqui você pode enviar o produto para a API ou o Redux
     setProduto({ nome: "", precoUnidade: 0, quantidade: 0, imagemUrl: "" });
   };
 
+  // Função para formatar a entrada de números nos campos de preço e quantidade (usa REGEX para formatar os valores, não encontrei um componente para isso)
   const handleInputNumberChange = (
     field: keyof ProdutoCreateDTO,
     value: string
@@ -130,7 +134,7 @@ const CadastroProdutoScreen = () => {
       />
 
       {/* Campo: Preço por Unidade */}
-      <Text style={styles.label}>Preço por Unidade (R$)</Text>
+      <Text style={styles.label}>Preço por Unidade/Kg (R$)</Text>
       <TextInput
         style={styles.input}
         placeholder="Digite o preço (R$)"
@@ -172,32 +176,32 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
-    backgroundColor: "#f0f8f4", // Fundo verde claro
+    backgroundColor: "#f0f8f4",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#4b7258", // Verde mais escuro
+    color: "#4b7258",
     textAlign: "center",
     marginBottom: 20,
   },
   label: {
     fontSize: 16,
-    color: "#4b7258", // Verde mais escuro
+    color: "#4b7258",
     marginBottom: 5,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#b5d3be", // Verde claro
-    backgroundColor: "#ffffff", // Fundo branco para contraste
+    borderColor: "#b5d3be",
+    backgroundColor: "#ffffff",
     padding: 10,
     borderRadius: 5,
     marginBottom: 15,
     fontSize: 16,
-    color: "#333", // Cor do texto
+    color: "#333",
   },
   button: {
-    backgroundColor: "#4b7258", // Verde escuro
+    backgroundColor: "#4b7258",
     padding: 15,
     borderRadius: 5,
     alignItems: "center",
@@ -206,7 +210,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#ffffff", // Branco
+    color: "#ffffff",
   },
 });
 

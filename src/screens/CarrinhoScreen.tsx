@@ -30,16 +30,17 @@ import {
 } from "expo-location";
 
 const CarrinhoScreen = () => {
-  const [location, setLocation] = React.useState<LocationObject | null>(null);
-  const [granted, setGranted] = React.useState<boolean>(false);
+  const [location, setLocation] = React.useState<LocationObject | null>(null); // Estado para armazenar a localização do usuário
+  const [granted, setGranted] = React.useState<boolean>(false); // Estado para armazenar se a permissão de GPS/Localização foi concedida
   const carrinhoItens = useSelector((state: RootState) => state.carrinho.itens);
   const valorTotalCarrinho = carrinhoItens.reduce(
     (acc, item) => acc + item.precoUnidade * item.quantidadeCarrinho,
     0
-  );
+  ); // Calcula o valor total do carrinho
 
   const dispatch = useDispatch();
 
+  // Função para solicitar permissão de GPS/Localização
   const requestLocationPermission = async () => {
     const { granted } = await requestForegroundPermissionsAsync();
     if (granted) {
@@ -47,15 +48,18 @@ const CarrinhoScreen = () => {
     }
   };
 
+  // Função para limpar o carrinho
   const handleLimparCarrinho = () => {
     dispatch(limparCarrinho());
     dispatch(incrementarEstoquesDosProdutos(carrinhoItens));
     alert("Carrinho limpo!");
   };
 
+  // Função para finalizar a compra e fazer requisição para API
   const handleFinalizarCompra = async () => {
     let currentPosition: LocationObject | null = null;
 
+    // Se o carrinho está vazio, retorna um aviso e não finaliza a compra
     if (carrinhoItens.length === 0) {
       Toast.show({
         type: "error",
@@ -67,6 +71,7 @@ const CarrinhoScreen = () => {
     }
 
     console.log("Verificando se permissão foi garantida");
+    // Se a permissão de GPS/Localização não foi concedida, exibe um aviso e não finaliza a compra
     if (granted) {
       console.log("pegando posição do usuário");
       currentPosition = await getCurrentPositionAsync();
@@ -85,18 +90,21 @@ const CarrinhoScreen = () => {
     console.log("Verificando se tem localização");
     console.log(location);
     console.log(currentPosition);
+    // Se não tiver localização (de qualquer forma), não finaliza a compra
     if (!location && !currentPosition) {
-      console.log("Retornaod pois não tem localização");
+      console.log("Retornaod, pois não tem localização");
       return;
     }
 
     console.log("Resgatando Posição");
+    // Resgata a posição do usuário
     const posicao = await getCurrentPositionAsync();
 
     console.log(
       "Posição: ",
       posicao.coords.latitude + " , " + posicao.coords.longitude
     );
+    // Cria um objeto com os dados da nova venda
     const novaVenda: VendaCreateDTO = {
       dataVenda: new Date().toISOString(),
       latitude: posicao.coords.latitude,
@@ -109,8 +117,10 @@ const CarrinhoScreen = () => {
       })),
     };
     console.log("Acessando Back para Criar venda");
+    // Faz a requisição para a API para criar a nova venda através do vendaService
     const venda = await createVenda(novaVenda);
 
+    // Se a venda foi criada com sucesso, limpa o carrinho e atualiza os produtos e vendas presentes no Redux/Estado Global
     if (venda) {
       dispatch(limparCarrinho());
 
@@ -146,12 +156,14 @@ const CarrinhoScreen = () => {
     }
   };
 
+  // useEffect para pedir permissão de GPS/Localização ao carregar a tela
   useEffect(() => {
     console.log("Pedidno Permissão");
     requestLocationPermission();
     console.log("Permissão: " + granted);
   }, []);
 
+  // Função para remover um produto do carrinho (atualiza a quantidade do produto no estoque [Redux/Estado Global])
   const handleRemoverProduto = (id: string) => {
     dispatch(removerDoCarrinho(id));
     dispatch(incrementarEstoque({ id }));

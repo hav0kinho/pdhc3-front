@@ -1,5 +1,6 @@
 import { apiFetch } from "./api";
 
+// Função para buscar o endereço de acordo com a latitude e longitude (Não usada por conta de alguns problemas relacionados ao CORS da API)
 export const getEndereco = async (
   latitude: string | number,
   logitude: string | number

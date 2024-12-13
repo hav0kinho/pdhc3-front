@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 
+// Componente estático que mostra os textos abaixo
 const ProdutosAgricolasCard = () => {
   return (
     <View style={styles.container}>

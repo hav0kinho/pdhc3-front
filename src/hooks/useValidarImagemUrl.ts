@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+// Hook para validar a URL de uma imagem
 export const useValidarImagemUrl = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);

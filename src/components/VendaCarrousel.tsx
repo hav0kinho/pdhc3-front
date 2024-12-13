@@ -7,9 +7,9 @@ interface Props {
 }
 
 const VendasCarrousel = ({ listaVendas }: Props) => {
+  // Função para ordenar as vendas por data (mais recente primeiro para o UX e etc)
   const ordenarVendasPorData = (vendas: Venda[]): Venda[] => {
     return vendas.sort((a, b) => {
-      // Converter strings de data para objetos Date
       const dataA = new Date(a.dataVenda);
       const dataB = new Date(b.dataVenda);
 

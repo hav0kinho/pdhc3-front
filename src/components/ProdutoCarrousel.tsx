@@ -6,6 +6,7 @@ interface Props {
   listaProdutos: Produto[];
 }
 
+// Componente que mostra os produtos em um "carrossel"
 const ProdutoCarousel = ({ listaProdutos }: Props) => {
   return (
     <FlatList

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 
+// Esse componente renderiza a tela de informações adicionais no MapaScreen
 const DetalhesVendaScreen = ({
   route,
   navigation,
@@ -15,12 +16,14 @@ const DetalhesVendaScreen = ({
     state.vendas.lista.find((v) => v.id === vendaId)
   );
 
+  // Função para buscar um produto pelo ID na Store
   const buscarProdutoPorId = (id: string) => {
     return useSelector((state: RootState) =>
       state.produtos.lista.find((produto) => produto.id === id)
     );
   };
 
+  // Se a venda não for encontrada, exibe uma mensagem de erro
   if (!venda) {
     return (
       <View style={styles.container}>

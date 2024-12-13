@@ -21,11 +21,13 @@ import { RootState } from "../redux/store";
 const HomeScreen = ({ navigation }: { navigation: any }) => {
   const produtos = useSelector((state: RootState) => state.produtos.lista);
   const vendas = useSelector((state: RootState) => state.vendas.lista);
-  const { vendasDoDia, quantidadeVendas, valorTotal } = useResumoDoDia();
+
+  const { vendasDoDia, quantidadeVendas, valorTotal } = useResumoDoDia(); // Hook customizado para pegar dados das vendas do dia.
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
 
+  // Função para buscar produtos da API através do produtoService
   const fetchProdutos = async () => {
     setIsLoading(true);
     try {
@@ -39,6 +41,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     }
   };
 
+  // Função para buscar vendas da API através do vendaService
   const fetchVendas = async () => {
     setIsLoading(true);
     try {
@@ -52,6 +55,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     }
   };
 
+  // useEffect para buscar produtos e vendas ao carregar a tela
   useEffect(() => {
     fetchProdutos();
     fetchVendas();

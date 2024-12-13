@@ -6,6 +6,7 @@ import { adicionarAoCarrinho } from "../redux/slices/carrinhoSlice";
 import Toast from "react-native-toast-message";
 import { decrementarEstoque } from "../redux/slices/produtosSlice";
 
+// Componente de cartão de produto (Que tem a imagem, nome, preço e botão para adicionar ao carrinho)
 const ProdutoCard = ({
   id,
   nome,
@@ -28,12 +29,11 @@ const ProdutoCard = ({
         visibilityTime: 2000, // Duração em milissegundos (2 segundos)
       });
     } else {
-      // Exibir mensagem de Toast
       Toast.show({
         type: "error",
         text1: "Estoque Esgotado!",
         text2: `${nome} está fora de estoque.`,
-        visibilityTime: 2000, // Duração em milissegundos (2 segundos)
+        visibilityTime: 2000,
       });
     }
   };
@@ -70,11 +70,11 @@ const ProdutoCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#f8f9fa", // Fundo claro
+    backgroundColor: "#f8f9fa",
     borderRadius: 10,
     overflow: "hidden",
     margin: 10,
-    width: 120, // Largura do cartão
+    width: 120,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 100, // Altura da imagem
+    height: 100,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
@@ -119,16 +119,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 30,
     backgroundColor: "#F9F1D2",
-    justifyContent: "center", // Centraliza verticalmente
-    alignItems: "center", // Centraliza horizontalmente
+    justifyContent: "center",
+    alignItems: "center",
   },
   botaoDesabilitado: {
     color: "black",
     borderRadius: 10,
     height: 30,
     backgroundColor: "#C0C0C0",
-    justifyContent: "center", // Centraliza verticalmente
-    alignItems: "center", // Centraliza horizontalmente
+    justifyContent: "center",
+    alignItems: "center",
   },
   textoBotaoAdicionar: {
     fontWeight: "bold",

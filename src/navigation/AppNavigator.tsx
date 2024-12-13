@@ -12,9 +12,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import DetalhesVendaScreen from "../screens/DetalhesVendaScreen";
 
+// Componentes e funções de navegação
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// Componente de navegação por abas
 function TabNavigator() {
   const carrinhoItens = useSelector((state: RootState) => state.carrinho.itens);
   return (
@@ -24,7 +26,7 @@ function TabNavigator() {
         animation: "shift",
         tabBarIcon: ({ color, size }) => {
           let iconName = "home";
-
+          // Verifica a rota atual e define o ícone a ser exibido
           if (route.name === "Home") {
             iconName = "home";
           } else if (route.name === "Carrinho") {
@@ -38,7 +40,7 @@ function TabNavigator() {
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarBadge:
-          route.name === "Carrinho"
+          route.name === "Carrinho" // Renderiza o "badgezinho" com o número de itens no carrinho
             ? carrinhoItens.length > 0
               ? carrinhoItens.length
               : undefined
@@ -71,14 +73,14 @@ function TabNavigator() {
         options={{
           title: "Cadastrar Produto",
           headerStyle: {
-            backgroundColor: "#627053", // Cor de fundo do cabeçalho
+            backgroundColor: "#627053",
           },
           headerTitleAlign: "center",
-          headerTintColor: "#ffffff", // Cor do texto e ícones no cabeçalho
+          headerTintColor: "#ffffff",
           headerTitleStyle: {
-            fontWeight: "bold", // Estilo do título
-            fontSize: 24, // Tamanho do título
-            textAlign: "center", // Centraliza o texto no cabeçalho (se aplicável)
+            fontWeight: "bold",
+            fontSize: 24,
+            textAlign: "center",
           },
         }}
       />
@@ -88,14 +90,14 @@ function TabNavigator() {
         options={{
           title: "Mapa",
           headerStyle: {
-            backgroundColor: "#627053", // Cor de fundo do cabeçalho
+            backgroundColor: "#627053",
           },
           headerTitleAlign: "center",
-          headerTintColor: "#ffffff", // Cor do texto e ícones no cabeçalho
+          headerTintColor: "#ffffff",
           headerTitleStyle: {
-            fontWeight: "bold", // Estilo do título
-            fontSize: 24, // Tamanho do título
-            textAlign: "center", // Centraliza o texto no cabeçalho (se aplicável)
+            fontWeight: "bold",
+            fontSize: 24,
+            textAlign: "center",
           },
         }}
       />
@@ -106,14 +108,14 @@ function TabNavigator() {
         options={{
           title: "Carrinho",
           headerStyle: {
-            backgroundColor: "#627053", // Cor de fundo do cabeçalho
+            backgroundColor: "#627053",
           },
           headerTitleAlign: "center",
-          headerTintColor: "#ffffff", // Cor do texto e ícones no cabeçalho
+          headerTintColor: "#ffffff",
           headerTitleStyle: {
-            fontWeight: "bold", // Estilo do título
-            fontSize: 24, // Tamanho do título
-            textAlign: "center", // Centraliza o texto no cabeçalho (se aplicável)
+            fontWeight: "bold",
+            fontSize: 24,
+            textAlign: "center",
           },
         }}
       />

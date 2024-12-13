@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 
+// Hook para calcular o resumo das vendas do dia
 export const useResumoDoDia = () => {
-  // Selecionar vendas do estado global
   const vendas = useSelector((state: RootState) => state.vendas.lista);
 
   // Data de hoje no formato ISO (somente a parte da data: YYYY-MM-DD)
@@ -15,13 +15,13 @@ export const useResumoDoDia = () => {
     )
   );
 
-  // Calcular valor total das vendas do diadsads
+  // Calcular valor total das vendas do dia
   const valorTotal = vendasDoDia.reduce(
     (acc, venda) => acc + venda.valorTotal,
     0
   );
 
-  // Retornar o resumo
+  // Retornar o resumo feito acima
   return {
     vendasDoDia,
     quantidadeVendas: vendasDoDia.length,
