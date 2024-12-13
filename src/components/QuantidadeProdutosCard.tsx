@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FBFBE0",
     width: 125,
-    height: 150,
+    height: 125,
     borderRadius: 10,
     padding: 10,
     alignItems: "center",
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   quantidadeText: {
+    fontSize: 16,
     color: "white",
     fontWeight: "bold",
   },

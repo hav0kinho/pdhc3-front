@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -19,12 +19,19 @@ import {
 } from "../redux/slices/produtosSlice";
 import { createVenda, getVendas } from "../services/vendaService";
 import { VendaCreateDTO } from "../models/DTO/VendaCreateDTO";
-import * as Location from "expo-location";
+
 import Toast from "react-native-toast-message";
 import { getProdutos } from "../services/produtoService";
 import { atualizarVendas } from "../redux/slices/vendasSlice";
+import {
+  getCurrentPositionAsync,
+  LocationObject,
+  requestForegroundPermissionsAsync,
+} from "expo-location";
 
 const CarrinhoScreen = () => {
+  const [location, setLocation] = React.useState<LocationObject | null>(null);
+  const [granted, setGranted] = React.useState<boolean>(false);
   const carrinhoItens = useSelector((state: RootState) => state.carrinho.itens);
   const valorTotalCarrinho = carrinhoItens.reduce(
     (acc, item) => acc + item.precoUnidade * item.quantidadeCarrinho,
@@ -33,6 +40,13 @@ const CarrinhoScreen = () => {
 
   const dispatch = useDispatch();
 
+  const requestLocationPermission = async () => {
+    const { granted } = await requestForegroundPermissionsAsync();
+    if (granted) {
+      setGranted(true);
+    }
+  };
+
   const handleLimparCarrinho = () => {
     dispatch(limparCarrinho());
     dispatch(incrementarEstoquesDosProdutos(carrinhoItens));
@@ -40,6 +54,8 @@ const CarrinhoScreen = () => {
   };
 
   const handleFinalizarCompra = async () => {
+    let currentPosition: LocationObject | null = null;
+
     if (carrinhoItens.length === 0) {
       Toast.show({
         type: "error",
@@ -50,23 +66,41 @@ const CarrinhoScreen = () => {
       return;
     }
 
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
+    console.log("Verificando se permissão foi garantida");
+    if (granted) {
+      console.log("pegando posição do usuário");
+      currentPosition = await getCurrentPositionAsync();
+      console.log("Posição do usuário: ", currentPosition);
+      setLocation(currentPosition);
+    } else {
       Toast.show({
         type: "error",
         text1: "Erro de Permissão",
         text2: `Habilite a localização para finalizar a compra.`,
-        visibilityTime: 2000, // Duração em milissegundos (2 segundos)
+        visibilityTime: 2000, // Duração em milissegundos (2 segundos
       });
       return;
     }
-    const location = await Location.getCurrentPositionAsync({});
-    console.error(location);
 
+    console.log("Verificando se tem localização");
+    console.log(location);
+    console.log(currentPosition);
+    if (!location && !currentPosition) {
+      console.log("Retornaod pois não tem localização");
+      return;
+    }
+
+    console.log("Resgatando Posição");
+    const posicao = await getCurrentPositionAsync();
+
+    console.log(
+      "Posição: ",
+      posicao.coords.latitude + " , " + posicao.coords.longitude
+    );
     const novaVenda: VendaCreateDTO = {
       dataVenda: new Date().toISOString(),
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
+      latitude: posicao.coords.latitude,
+      longitude: posicao.coords.longitude,
       valorTotal: valorTotalCarrinho,
       produtosVendidos: carrinhoItens.map((item) => ({
         quantidadeVendida: item.quantidadeCarrinho,
@@ -74,7 +108,7 @@ const CarrinhoScreen = () => {
         produto: item.id,
       })),
     };
-
+    console.log("Acessando Back para Criar venda");
     const venda = await createVenda(novaVenda);
 
     if (venda) {
@@ -112,6 +146,12 @@ const CarrinhoScreen = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("Pedidno Permissão");
+    requestLocationPermission();
+    console.log("Permissão: " + granted);
+  }, []);
+
   const handleRemoverProduto = (id: string) => {
     dispatch(removerDoCarrinho(id));
     dispatch(incrementarEstoque({ id }));
@@ -144,18 +184,20 @@ const CarrinhoScreen = () => {
           </View>
         )}
       />
-      <TouchableOpacity
-        style={styles.botaoLimpar}
-        onPress={handleLimparCarrinho}
-      >
-        <Text style={styles.textoBotao}>Limpar Carrinho</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.botaoFinalizar}
-        onPress={handleFinalizarCompra}
-      >
-        <Text style={styles.textoBotao}>Finalizar Compra</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          style={styles.botaoLimpar}
+          onPress={handleLimparCarrinho}
+        >
+          <Text style={styles.textoBotao}>Limpar Carrinho</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.botaoFinalizar}
+          onPress={handleFinalizarCompra}
+        >
+          <Text style={styles.textoBotao}>Finalizar Compra</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -224,6 +266,10 @@ const styles = StyleSheet.create({
   textoBotao: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

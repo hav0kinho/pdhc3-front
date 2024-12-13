@@ -21,14 +21,14 @@ const MapaScreen = ({ navigation }: { navigation: any }) => {
         initialRegion={{
           latitude: vendas[0]?.latitude || -8.05428,
           longitude: vendas[0]?.longitude || -34.8813,
-          latitudeDelta: 0.5,
-          longitudeDelta: 0.5,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
         }}
       >
         {vendas.map((venda) => (
           <Marker
             key={venda.id}
-            title={`Vendas: ${venda.produtosVendidos.length.toString()}`}
+            title={`Produtos Vendidos: ${venda.produtosVendidos.length.toString()}`}
             description={`Valor Total: R$ ${venda.valorTotal.toFixed(2)}`}
             coordinate={{
               latitude: venda.latitude,

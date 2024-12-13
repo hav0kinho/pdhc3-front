@@ -6,6 +6,15 @@ import { RootState } from "../redux/store";
 interface VendaCardProps {
   venda: Venda;
 }
+const formatDateTime = (date: Date) => {
+  const day = String(date.getDate()).padStart(2, "0"); // Obtém o dia com 2 dígitos
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Mês (0-11) ajustado para (1-12)
+  const year = date.getFullYear(); // Ano completo
+  const hours = String(date.getHours()).padStart(2, "0"); // Horas com 2 dígitos
+  const minutes = String(date.getMinutes()).padStart(2, "0"); // Minutos com 2 dígitos
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+};
 
 const VendaCard = ({ venda }: VendaCardProps) => {
   const produtos = useSelector((state: RootState) => state.produtos.lista);
@@ -15,17 +24,15 @@ const VendaCard = ({ venda }: VendaCardProps) => {
       const produto = produtos.find(
         (produto) => produto.id === produtoVenda.produtoId
       );
-      return `• ${produto?.nome || "Produto desconhecido"}\n   - Quantidade: ${
-        produtoVenda.quantidadeVendida
+      return `• ${produtoVenda.quantidadeVendida}x ${
+        produto?.nome || "Produto desconhecido"
       }\n   - Total: R$ ${produtoVenda.valorPago.toFixed(2)}`;
     });
 
     const relatorioProdutosVendidos = produtosVendidos.join("\n\n");
 
-    const relatorio = `📝 *Relatório da Venda*\n\n📅 Data: ${new Date(
-      venda.dataVenda
-    ).toLocaleDateString(
-      "pt-BR"
+    const relatorio = `📝 *Relatório da Venda*\n\n📅 Data: ${formatDateTime(
+      new Date(venda.dataVenda)
     )}\n💰 Valor Total: R$ ${venda.valorTotal.toFixed(
       2
     )}\n\n📦 Produtos Vendidos:\n${relatorioProdutosVendidos}`;
@@ -40,7 +47,7 @@ const VendaCard = ({ venda }: VendaCardProps) => {
           <Text style={styles.valor}>R$ {venda.valorTotal.toFixed(2)}</Text>
         </View>
         <Text style={styles.dataVenda}>
-          {new Date(venda.dataVenda).toLocaleDateString("pt-BR")}
+          {formatDateTime(new Date(venda.dataVenda))}
         </Text>
 
         <View style={styles.botaoContainer}>

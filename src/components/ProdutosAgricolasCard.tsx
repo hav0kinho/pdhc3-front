@@ -4,7 +4,9 @@ const ProdutosAgricolasCard = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.productText}>Produtos de Agricultura</Text>
-      <Text>Quantidade e Preços dos produtos</Text>
+      <Text style={styles.productSubtitle}>
+        Quantidade e Preços dos produtos
+      </Text>
     </View>
   );
 };
@@ -12,17 +14,20 @@ const ProdutosAgricolasCard = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FBFBE0",
-    width: 250,
-    height: 150,
+    width: 200,
+    height: 125,
     borderRadius: 10,
     padding: 10,
     alignItems: "center",
     justifyContent: "center",
   },
   productText: {
-    fontSize: 36,
+    fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  productSubtitle: {
+    fontSize: 16,
   },
 });
 
